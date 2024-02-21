@@ -1,4 +1,4 @@
-package me.reezy.cosmo.foundation.span
+package me.reezy.cosmo.span.style
 
 import android.graphics.Canvas
 import android.graphics.Color
@@ -7,7 +7,7 @@ import android.graphics.RectF
 import android.text.style.ReplacementSpan
 
 
-class DotStyle(private val color: Int, private val size: Int) : ReplacementSpan() {
+class DotSpan(private val color: Int, private val size: Int) : ReplacementSpan() {
 
     override fun draw(canvas: Canvas, text: CharSequence, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
         val newPaint = Paint(paint) // make a copy for not editing the referenced paint

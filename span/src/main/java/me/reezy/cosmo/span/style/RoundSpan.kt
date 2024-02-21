@@ -1,13 +1,13 @@
-package me.reezy.cosmo.foundation.span
+package me.reezy.cosmo.span.style
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.text.style.ReplacementSpan
 
-class RoundStyle(
-    private var backgroundColor: Int = 0,
-    private var cornerRadius: Float = -1f,
+class RoundSpan(
+    private var bgColor: Int = 0,
+    private var cornerRadius: Int = -1,
     private val height: Int = 0,
     private val padding: Int = 0,
     private val spacing: Int = 0
@@ -19,9 +19,9 @@ class RoundStyle(
     override fun draw(canvas: Canvas, text: CharSequence, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
         val newPaint = Paint(paint)
 
-        newPaint.color = backgroundColor
+        newPaint.color = bgColor
         val rect = RectF(x, top.toFloat(), x + mWidth + padding * 2, (top + height).toFloat())
-        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, newPaint)
+        canvas.drawRoundRect(rect, cornerRadius.toFloat(), cornerRadius.toFloat(), newPaint)
 
         newPaint.color = paint.color
         newPaint.textAlign = Paint.Align.CENTER
@@ -40,8 +40,8 @@ class RoundStyle(
         if (mWidth < height || end - start == 1) {
             mWidth = height
         }
-        if (cornerRadius == -1f) {
-            cornerRadius = (height / 2).toFloat()
+        if (cornerRadius == -1) {
+            cornerRadius = height / 2
         }
         return mWidth + padding * 2 + spacing
     }

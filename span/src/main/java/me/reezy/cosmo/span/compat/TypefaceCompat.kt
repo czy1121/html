@@ -1,12 +1,11 @@
-package me.reezy.cosmo.foundation.span
+package me.reezy.cosmo.span.compat
 
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.text.TextPaint
 import android.text.style.MetricAffectingSpan
 
-
-class TypefaceStyle(private val newType: Typeface) : MetricAffectingSpan() {
+class TypefaceCompat(private val newType: Typeface) : MetricAffectingSpan() {
 
     override fun updateDrawState(paint: TextPaint) {
         apply(paint, newType)
