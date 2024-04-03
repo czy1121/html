@@ -49,8 +49,8 @@ fun String.setSpans(regex: String, buildSpans: SpannableStringBuilder.() -> Arra
     return s
 }
 
-fun String.setNumberStyle(scale: Float? = null, color: Int? = null, typeface: Typeface? = null, style: Int? = null): Spanned {
-    return setSpans("[0-9]+(\\.[0-9]+)*") {
+fun String.setStyle(regex: String, scale: Float? = null, color: Int? = null, typeface: Typeface? = null, style: Int? = null): Spanned {
+    return setSpans(regex) {
         val spans = mutableListOf<Any>()
         color?.let {
             spans.add(TextColorSpan(it))
@@ -74,6 +74,10 @@ fun String.setNumberStyle(scale: Float? = null, color: Int? = null, typeface: Ty
         }
         spans.toTypedArray()
     }
+}
+
+inline fun String.setNumberStyle(scale: Float? = null, color: Int? = null, typeface: Typeface? = null, style: Int? = null): Spanned {
+    return setStyle("[0-9]+(\\.[0-9]+)*", scale, color, typeface, style)
 }
 
 @PublishedApi
