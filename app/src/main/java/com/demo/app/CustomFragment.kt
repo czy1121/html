@@ -2,6 +2,7 @@ package com.demo.app
 
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.View
@@ -15,9 +16,11 @@ import me.reezy.cosmo.span.color
 import me.reezy.cosmo.span.inBlock
 import me.reezy.cosmo.span.lineHeight
 import me.reezy.cosmo.span.scale
-import me.reezy.cosmo.span.style.RoundSpan
+import me.reezy.cosmo.span.style.LabelSpan
 import me.reezy.cosmo.span.style.Text3dSpan
 import me.reezy.cosmo.span.style.TextStrokeSpan
+import me.reezy.cosmo.span.labels
+import me.reezy.cosmo.span.setNumberStyle
 
 class CustomFragment : Fragment(R.layout.fragment_text) {
 
@@ -37,14 +40,26 @@ class CustomFragment : Fragment(R.layout.fragment_text) {
             }
             br()
 
-            inBlock(lineHeight(24f.dp)) {
-                listOf("round", "span", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine").forEach {
-                    inSpans(RoundSpan(Color.RED, 3f.dp, 20f.dp, 3f.dp, 4f.dp)) {
+            inBlock(lineHeight(40f.dp)) {
+                listOf("label", "span", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine").forEach {
+                    inSpans(LabelSpan(Color.RED, 20f.dp, cornerRadius = 3f.dp, padding = 3f.dp, spacing = 4f.dp)) {
                         append(it)
                     }
                 }
             }
+
+            inBlock(lineHeight(40f.dp)) {
+                val tags = listOf("label", "span", "一二", "三四五", "六七八", "哈哈哈哈", "five", "six", "seven", "eight", "nine")
+                val colors = listOf(Color.RED, Color.BLUE, Color.MAGENTA)
+                labels(tags, colors, 20f.dp, cornerRadius = 0, stroke = 1f.dp, spacing = 5f.dp)
+            }
+
+
+            append("\"一1二22三3.456四五\".setNumberStyle(2f, color = Color.RED, style = Typeface.BOLD_ITALIC)")
+            br()
+            append("一1二22三3.456四五".setNumberStyle(2f, color = Color.RED, style = Typeface.BOLD_ITALIC))
         }
+
     }
 
     private val Float.dp: Int get() = (Resources.getSystem().displayMetrics.density * this).toInt()

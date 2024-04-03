@@ -5,12 +5,13 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.text.style.ReplacementSpan
 
-class RoundSpan(
-    private var bgColor: Int = 0,
+class LabelSpan(
+    private val color: Int,
+    private val height: Int,
     private var cornerRadius: Int = -1,
-    private val height: Int = 0,
     private val padding: Int = 0,
-    private val spacing: Int = 0
+    private val spacing: Int = 0,
+    private val stroke: Int = 0,
 ) : ReplacementSpan() {
 
 
@@ -19,13 +20,21 @@ class RoundSpan(
     override fun draw(canvas: Canvas, text: CharSequence, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
         val newPaint = Paint(paint)
 
-        newPaint.color = bgColor
+        newPaint.color = color
+        newPaint.strokeWidth = stroke.toFloat()
+        newPaint.style = if (stroke > 0) Paint.Style.STROKE else  Paint.Style.FILL_AND_STROKE
+
+        val half = stroke / 2f
+
         val rect = RectF(x, top.toFloat(), x + mWidth + padding * 2, (top + height).toFloat())
+        rect.inset(half, half)
         canvas.drawRoundRect(rect, cornerRadius.toFloat(), cornerRadius.toFloat(), newPaint)
 
         newPaint.color = paint.color
+        newPaint.style = paint.style
+        newPaint.strokeWidth = paint.strokeWidth
         newPaint.textAlign = Paint.Align.CENTER
-        canvas.drawText(text, start, end, rect.centerX(), (rect.centerY() - (newPaint.descent() + newPaint.ascent()) / 2) - 3, newPaint)
+        canvas.drawText(text, start, end, rect.centerX(), (rect.centerY() - (newPaint.descent() + newPaint.ascent()) / 2), newPaint)
     }
 
     override fun getSize(paint: Paint, text: CharSequence, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
