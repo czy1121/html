@@ -8,7 +8,7 @@ import android.text.style.ReplacementSpan
 class LabelSpan(
     private val color: Int,
     private val height: Int,
-    private var cornerRadius: Int = -1,
+    private var corner: Int = -1,
     private val padding: Int = 0,
     private val spacing: Int = 0,
     private val stroke: Int = 0,
@@ -22,15 +22,15 @@ class LabelSpan(
 
         newPaint.color = color
         newPaint.strokeWidth = stroke.toFloat()
-        newPaint.style = if (stroke > 0) Paint.Style.STROKE else  Paint.Style.FILL_AND_STROKE
+        newPaint.style = if (stroke > 0) Paint.Style.STROKE else Paint.Style.FILL_AND_STROKE
 
         val half = stroke / 2f
 
         val rect = RectF(x, top.toFloat(), x + mWidth + padding * 2, (top + height).toFloat())
         rect.inset(half, half)
-        canvas.drawRoundRect(rect, cornerRadius.toFloat(), cornerRadius.toFloat(), newPaint)
+        canvas.drawRoundRect(rect, corner.toFloat(), corner.toFloat(), newPaint)
 
-        newPaint.color = paint.color
+        newPaint.color = if (stroke > 0) color else paint.color
         newPaint.style = paint.style
         newPaint.strokeWidth = paint.strokeWidth
         newPaint.textAlign = Paint.Align.CENTER
@@ -49,8 +49,8 @@ class LabelSpan(
         if (mWidth < height || end - start == 1) {
             mWidth = height
         }
-        if (cornerRadius == -1) {
-            cornerRadius = height / 2
+        if (corner == -1) {
+            corner = height / 2
         }
         return mWidth + padding * 2 + spacing
     }

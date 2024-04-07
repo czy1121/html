@@ -8,17 +8,14 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.text.style.ForegroundColorSpan
 import android.text.style.ParagraphStyle
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
-import android.util.Log
-import androidx.core.text.inSpans
+import androidx.core.text.buildSpannedString
 import me.reezy.cosmo.span.compat.TypefaceCompat
 import me.reezy.cosmo.span.style.TextColorSpan
 import java.util.regex.Pattern
-
 
 
 fun SpannableStringBuilder.inBlock(vararg spans: ParagraphStyle, builderAction: SpannableStringBuilder.() -> Unit): SpannableStringBuilder {
@@ -78,6 +75,29 @@ fun String.setStyle(regex: String, scale: Float? = null, color: Int? = null, typ
 
 inline fun String.setNumberStyle(scale: Float? = null, color: Int? = null, typeface: Typeface? = null, style: Int? = null): Spanned {
     return setStyle("[0-9]+(\\.[0-9]+)*", scale, color, typeface, style)
+}
+
+
+inline fun List<String>.setLabelStyle(
+    colors: List<Int>,
+    height: Int,
+    corner: Int = -1,
+    padding: Int = 3f.dp,
+    spacing: Int = 3f.dp,
+    stroke: Int = 0,
+) = buildSpannedString {
+    addLabels(this@setLabelStyle, colors, height, corner, padding, spacing, stroke)
+}
+
+inline fun List<String>.setLabelStyle(
+    color: Int,
+    height: Int,
+    corner: Int = -1,
+    padding: Int = 3f.dp,
+    spacing: Int = 3f.dp,
+    stroke: Int = 0,
+) = buildSpannedString {
+    addLabels(this@setLabelStyle, listOf(color), height, corner, padding, spacing, stroke)
 }
 
 @PublishedApi
