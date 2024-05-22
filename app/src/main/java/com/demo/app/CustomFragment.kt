@@ -17,6 +17,7 @@ import me.reezy.cosmo.span.color
 import me.reezy.cosmo.span.inBlock
 import me.reezy.cosmo.span.lineHeight
 import me.reezy.cosmo.span.scale
+import me.reezy.cosmo.span.setNumberStyle
 import me.reezy.cosmo.span.setStyle
 import me.reezy.cosmo.span.style.Text3dSpan
 import me.reezy.cosmo.span.style.TextStrokeSpan
@@ -52,11 +53,11 @@ class CustomFragment : Fragment(R.layout.fragment_text) {
             }
 
 
-            append("\"一1二22三3.456%四五\".setNumberStyle(2f, color = Color.RED, style = Typeface.BOLD_ITALIC)")
+            append("\"一1二+22三3%四+4.4%五-5.5%\".setNumberStyle(2f, color = Color.RED, style = Typeface.BOLD_ITALIC)")
 
             br()
 
-            append("一1二22三3.456四五".setStyle("[0-9]+(\\.[0-9]+)*\\%",2f, color = Color.RED, style = Typeface.BOLD_ITALIC))
+            append("一1二+22三3%四+4.4%五-5.5%".setNumberStyle( 2f, color = Color.RED, style = Typeface.BOLD_ITALIC))
 
 
         }

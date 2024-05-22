@@ -14,9 +14,10 @@ class TextStrokeSpan(
 
     override fun getSize(paint: Paint, text: CharSequence, start: Int, end: Int, fontMetrics: Paint.FontMetricsInt?): Int {
         if (fontMetrics != null && paint.fontMetricsInt != null) {
-            fontMetrics.bottom = paint.fontMetricsInt.bottom
             fontMetrics.top = paint.fontMetricsInt.top
+            fontMetrics.ascent = paint.fontMetricsInt.ascent
             fontMetrics.descent = paint.fontMetricsInt.descent
+            fontMetrics.bottom = paint.fontMetricsInt.bottom
             fontMetrics.leading = paint.fontMetricsInt.leading
         }
         return paint.measureText(text.toString().substring(start until end)).toInt()
@@ -25,7 +26,11 @@ class TextStrokeSpan(
 
     override fun draw(canvas: Canvas, text: CharSequence, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
 
+        canvas.drawText(text, start, end, x, y.toFloat(), paint)
+
         val color = paint.color
+        val style = paint.style
+        val width = paint.strokeWidth
 
         paint.color = strokeColor
         paint.style = Paint.Style.STROKE
@@ -33,8 +38,8 @@ class TextStrokeSpan(
         canvas.drawText(text, start, end, x, y.toFloat(), paint)
 
         paint.color = color
-        paint.style = Paint.Style.FILL
-        canvas.drawText(text, start, end, x, y.toFloat(), paint)
+        paint.style = style
+        paint.strokeWidth = width
     }
 
 }

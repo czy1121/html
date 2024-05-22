@@ -7,12 +7,12 @@ import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.BackgroundColorSpan
+import android.text.style.DynamicDrawableSpan
 import android.text.style.ImageSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
-import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import me.reezy.cosmo.span.style.LabelSpan
 import me.reezy.cosmo.span.style.TextColorSpan
@@ -31,7 +31,11 @@ inline fun SpannableStringBuilder.bgColor(color: Int, text: String) = inSpans(Ba
 
 inline fun SpannableStringBuilder.image(context: Context, resourceId: Int) = inSpans(ImageSpan(context, resourceId)) { append(" ") }
 
+inline fun SpannableStringBuilder.image(context: Context, resourceId: Int, width: Int, height: Int = width, align:Int = DynamicDrawableSpan.ALIGN_BOTTOM)
+    = inSpans(ImageSpan(context.getDrawable(resourceId, width, height), align)) { append(" ") }
+
 inline fun SpannableStringBuilder.clickable(text: String, crossinline action: () -> Unit) = inSpans(clickable(action)) { append(text) }
+
 
 
 fun SpannableStringBuilder.addLabel(

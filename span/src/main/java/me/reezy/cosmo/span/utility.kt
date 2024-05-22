@@ -2,8 +2,10 @@
 
 package me.reezy.cosmo.span
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -74,7 +76,7 @@ fun String.setStyle(regex: String, scale: Float? = null, color: Int? = null, typ
 }
 
 inline fun String.setNumberStyle(scale: Float? = null, color: Int? = null, typeface: Typeface? = null, style: Int? = null): Spanned {
-    return setStyle("[0-9]+(\\.[0-9]+)*", scale, color, typeface, style)
+    return setStyle("[+-]?[0-9]+(\\.[0-9]+)*[%]?", scale, color, typeface, style)
 }
 
 
@@ -98,6 +100,13 @@ inline fun List<String>.setLabelStyle(
     stroke: Int = 0,
 ) = buildSpannedString {
     addLabels(this@setLabelStyle, listOf(color), height, corner, padding, spacing, stroke)
+}
+
+
+fun Context.getDrawable(resId: Int, width: Int, height: Int = width): Drawable {
+    val drawable = getDrawable(resId)!!
+    drawable.setBounds(0, 0, width, height)
+    return drawable
 }
 
 @PublishedApi

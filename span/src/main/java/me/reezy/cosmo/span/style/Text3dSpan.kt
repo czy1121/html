@@ -14,9 +14,10 @@ class Text3dSpan(
 
     override fun getSize(paint: Paint, text: CharSequence, start: Int, end: Int, fontMetrics: Paint.FontMetricsInt?): Int {
         if (fontMetrics != null && paint.fontMetricsInt != null) {
-            fontMetrics.bottom = paint.fontMetricsInt.bottom
             fontMetrics.top = paint.fontMetricsInt.top
+            fontMetrics.ascent = paint.fontMetricsInt.ascent
             fontMetrics.descent = paint.fontMetricsInt.descent
+            fontMetrics.bottom = paint.fontMetricsInt.bottom
             fontMetrics.leading = paint.fontMetricsInt.leading
         }
         return paint.measureText(text.toString().substring(start until end)).toInt()
