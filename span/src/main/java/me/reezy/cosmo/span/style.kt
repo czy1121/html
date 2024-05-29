@@ -26,6 +26,7 @@ import me.reezy.cosmo.span.compat.BulletCompat
 import me.reezy.cosmo.span.compat.LineHeightCompat
 import me.reezy.cosmo.span.compat.QuoteCompat
 import me.reezy.cosmo.span.compat.TypefaceCompat
+import me.reezy.cosmo.span.style.TextStrokeSpan
 
 inline val SpannableStringBuilder.bold get() = StyleSpan(Typeface.BOLD)
 inline val SpannableStringBuilder.italic get() = StyleSpan(Typeface.ITALIC)
@@ -43,6 +44,8 @@ inline fun SpannableStringBuilder.typeface(typeface: Typeface) = if (Build.VERSI
 } else {
     TypefaceCompat(typeface)
 }
+
+inline fun SpannableStringBuilder.stroke(color: Int = Color.BLACK, width: Int = 1f.dp) = TextStrokeSpan(color, width)
 
 inline fun SpannableStringBuilder.clickable(crossinline action: () -> Unit) = object : ClickableSpan() {
     override fun onClick(widget: View) {
