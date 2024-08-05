@@ -9,7 +9,8 @@ import androidx.annotation.Dimension
 
 class TextStrokeSpan(
     @ColorInt private val strokeColor: Int,
-    @Dimension private val strokeWidth: Int
+    @Dimension private val strokeWidth: Int,
+    @Dimension private val letterSpacing: Int = 0,
 ) : ReplacementSpan() {
 
     override fun getSize(paint: Paint, text: CharSequence, start: Int, end: Int, fontMetrics: Paint.FontMetricsInt?): Int {
@@ -20,7 +21,7 @@ class TextStrokeSpan(
             fontMetrics.bottom = paint.fontMetricsInt.bottom
             fontMetrics.leading = paint.fontMetricsInt.leading
         }
-        return paint.measureText(text.toString().substring(start until end)).toInt() + strokeWidth
+        return paint.measureText(text.toString().substring(start until end)).toInt() + strokeWidth * 2
     }
 
 
@@ -30,17 +31,22 @@ class TextStrokeSpan(
         val color = paint.color
         val style = paint.style
         val width = paint.strokeWidth
+        val spacing = paint.letterSpacing
+
+        paint.letterSpacing = letterSpacing / paint.textSize
 
         paint.color = strokeColor
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = strokeWidth.toFloat() * 2
-        canvas.drawText(text, start, end, x, y.toFloat(), paint)
+        canvas.drawText(text, start, end, x + strokeWidth, y.toFloat(), paint)
 
         paint.color = color
         paint.style = style
         paint.strokeWidth = width
 
-        canvas.drawText(text, start, end, x, y.toFloat(), paint)
+        canvas.drawText(text, start, end, x + strokeWidth, y.toFloat(), paint)
+
+        paint.letterSpacing = spacing
     }
 
 }

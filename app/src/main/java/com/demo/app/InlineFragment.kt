@@ -4,18 +4,18 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.text.style.DynamicDrawableSpan
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.fragment.app.Fragment
-import com.demo.app.databinding.FragmentHtmlBinding
-import me.reezy.cosmo.span.bgColor
 import me.reezy.cosmo.span.bold
 import me.reezy.cosmo.span.br
 import me.reezy.cosmo.span.clickable
 import me.reezy.cosmo.span.color
+import me.reezy.cosmo.span.text
 import me.reezy.cosmo.span.image
 import me.reezy.cosmo.span.inBlock
 import me.reezy.cosmo.span.italic
@@ -41,11 +41,13 @@ class InlineFragment : Fragment(R.layout.fragment_text) {
                 br()
                 strike("strike text")
                 br()
-                scale(2f, "relative size x 2")
+                text("relative size x 2", scale = 2f)
                 br()
-                color(Color.RED, "text foreground color")
+                text("text foreground color", color = Color.RED)
                 br()
-                bgColor(Color.RED, "text background color")
+                text("text background color", bgColor = Color.RED)
+                br()
+                text("text no style")
                 br()
                 clickable("clickable text") {
                     Toast.makeText(requireContext(), "clickable text clicked", Toast.LENGTH_SHORT).show()
@@ -58,9 +60,15 @@ class InlineFragment : Fragment(R.layout.fragment_text) {
                 }
             }
             br()
-            image(requireContext(), R.mipmap.ic_launcher)
-            append("image")
+            inBlock() {
+                inSpans() {
+                    append("image")
+                    image(requireContext(), R.mipmap.ic_launcher, 40f.dp, align = DynamicDrawableSpan.ALIGN_CENTER)
+                    append("image")
+                }
+            }
         }
+
     }
 
     private val Float.dp: Int get() = (Resources.getSystem().displayMetrics.density * this).toInt()

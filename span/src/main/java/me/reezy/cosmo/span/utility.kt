@@ -4,12 +4,15 @@ package me.reezy.cosmo.span
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.BackgroundColorSpan
 import android.text.style.ParagraphStyle
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
@@ -17,6 +20,7 @@ import android.text.style.TypefaceSpan
 import androidx.core.text.buildSpannedString
 import me.reezy.cosmo.span.compat.TypefaceCompat
 import me.reezy.cosmo.span.style.TextColorSpan
+import me.reezy.cosmo.span.style.TextStrokeSpan
 import java.util.regex.Pattern
 
 
@@ -33,22 +37,33 @@ fun SpannableStringBuilder.inBlock(vararg spans: ParagraphStyle, builderAction: 
     return this
 }
 
-fun String.setSpans(regex: String, buildSpans: SpannableStringBuilder.() -> Array<Any>): Spanned {
+fun CharSequence.setSpans(regex: String? = null, buildSpans: SpannableStringBuilder.() -> Array<Any>): Spanned {
     val s = SpannableStringBuilder(this)
-    val m = Pattern.compile(regex).matcher(this)
+    if (regex != null) {
+        val m = Pattern.compile(regex).matcher(this)
 
-    while (m.find()) {
-        val start = m.start()
-        val end = m.end()
+        while (m.find()) {
+            val start = m.start()
+            val end = m.end()
 
+            for (span in s.buildSpans()) {
+                s.setSpan(span, start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+            }
+        }
+    } else {
         for (span in s.buildSpans()) {
-            s.setSpan(span, start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+            s.setSpan(span, 0, length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
         }
     }
     return s
 }
 
-fun String.setStyle(regex: String, scale: Float? = null, color: Int? = null, typeface: Typeface? = null, style: Int? = null): Spanned {
+fun CharSequence.setStroke(regex: String? = null, color: Int = Color.BLACK, width: Int = 1f.dp, letterSpacing: Int = 0) = setSpans(regex) {
+    arrayOf(TextStrokeSpan(color, width, letterSpacing))
+}
+
+
+fun CharSequence.setStyle(regex: String? = null, scale: Float? = null, size: Int? = null, color: Int? = null, typeface: Typeface? = null, style: Int? = null, bgColor: Int? = null,): Spanned {
     return setSpans(regex) {
         val spans = mutableListOf<Any>()
         color?.let {
@@ -59,8 +74,16 @@ fun String.setStyle(regex: String, scale: Float? = null, color: Int? = null, typ
             spans.add(RelativeSizeSpan(it))
         }
 
+        size?.let {
+            spans.add(AbsoluteSizeSpan(it))
+        }
+
         style?.let {
             spans.add(StyleSpan(it))
+        }
+
+        bgColor?.let {
+            spans.add(BackgroundColorSpan(it))
         }
 
         typeface?.let {
@@ -75,8 +98,8 @@ fun String.setStyle(regex: String, scale: Float? = null, color: Int? = null, typ
     }
 }
 
-inline fun String.setNumberStyle(scale: Float? = null, color: Int? = null, typeface: Typeface? = null, style: Int? = null): Spanned {
-    return setStyle("[+-]?[0-9]+(\\.[0-9]+)*[%]?", scale, color, typeface, style)
+inline fun CharSequence.setNumberStyle(scale: Float? = null, size: Int? = null, color: Int? = null, typeface: Typeface? = null, style: Int? = null): Spanned {
+    return setStyle("[+-]?[0-9]+(\\.[0-9]+)*[%]?", scale, size, color, typeface, style)
 }
 
 
