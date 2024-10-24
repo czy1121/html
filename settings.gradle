@@ -20,4 +20,3 @@ rootProject.name = "html"
 include ':app'
 
 include ':html'
-include ':span'
